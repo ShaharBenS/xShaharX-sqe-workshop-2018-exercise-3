@@ -1,64 +1,73 @@
-# Sample project
+# הנדסת איכות תוכנה - סדנה - שלב ג' 
 
-* Use this project as a template.
-* Clone the project:
-    * Using user/password: `git clone https://github.com/aviram26/sqe-workshop-2018-sample-project.git` 
-    * Using SSH key: `git clone git@github.com:aviram26/sqe-workshop-2018-sample-project.git`
-* Install all libraries run: `npm install`
-* For code parsing, this project uses the [Esprima](http://esprima.org/) library.
-    * See example usage in `src/js/code-analyzer.js`
-* Run the project:
-    * From the command-line run: `npm start`
-    * After the bundler is done, execute the `index.html` from your IDE (preferably `WebStorm`)
-    * Try the parser... 
-* For testing, this project uses the [Mocha](https://mochajs.org/) library.
-    * From the command-line run: `npm run test`
-    * See example test in `test/code-analyzer.test.js`
-* For coverage, this project uses the [nyc](https://github.com/istanbuljs/nyc) library.
-    * From the command-line run: `npm run coverage`
-    * See the report file `coverage/coverage-summary.json`
-* For linting, this project uses the [ESLint](https://eslint.org/) library.
-    * From the command-line run: `npm run lint`
-    * See the report file `lint/eslint-report.json`
+### נושא: CFG  
+בשלב זה יפותח רכיב מערכת שהקלט שלו מורכב מ:
+* קטע קוד הכולל פונציה
+* קלט לפונקציה בפורמט הבא:
+    * agr-1, arg-2, ..., arg-n
+    * מחרוזת "תעטף" בגרש או גרשיים. דוגמה: 'hello world'
+    * ערך מספרי או בוליאני. דוגמה: 1, true, 3.14
+    * מערך יופיע "עטוף" בסוגריים מרובעים. דוגמה: [1, 2, 3], [hello', 5, true']
 
-#### I/O Example
+והפלט שלו מורכב מהחלקים הבאים:
+* הפונקציה, ביצוגה הויזואלי כ CFG הכוללת קודקודים, קשתות ושאר הסימנים כפי שנלמד
+* יש לצבוע את הקודקודים המייצגים את המסלול שנוצר ע"י הקלט בצבע ירוק
 
-The input:
+* פונקצית הקלט תוכל לכלול:
+    * הגדרה והשמה של משתנים
+    * תנאים מסוג if - else-if - else
+    * לולאות while
+    * return יחיד
+    
 
-```javascript
-function binarySearch(X, V, n){
-    let low, high, mid;
-    low = 0;
-    high = n - 1;
-    while (low <= high) {
-        mid = (low + high)/2;
-        if (X < V[mid])
-            high = mid - 1;
-        else if (X > V[mid])
-            low = mid + 1;
-        else
-            return mid;
+* דוגמה:
+
+```javascript 1.7
+function foo(x, y, z){
+    let a = x + 1;
+    let b = a + y;
+    let c = 0;
+    
+    if (b < z) {
+        c = c + 5;
+    } else if (b < z * 2) {
+        c = c + x + 5;
+    } else {
+        c = c + z + 5;
     }
-    return -1;
+    
+    return c;
 }
 ```
+Input:
+```
+1, 2, 3
+```
 
-Should produce:
+![image](images/cfg-example.png)
 
-Line | Type | Name | Condition | Value
---- | --- | --- | --- | ---
-1 | function declaration | binarySearch 
-1 | variable declaration | X
-1 | variable declaration | V
-... | ... | ... | ... | ...
-2 | variable declaration | low | | null (or nothing)
-... | ... | ... | ... | ...
-3 | assignment expression | low | | 0
-4 | assignment expression | high | | n - 1
-5 | while statement | | low <= high | 
-... | ... | ... | ... | ...
-7 | if statement | | X < V[mid] |
-... | ... | ... | ... | ... 
-9 | else if statement | | X > V[mid] |
-... | ... | ... | ... | ... 
-12 | return statement | | | mid
+
+* דגשים למימוש:
+    * לא להמציא את הגלגל מחדש
+    * טסטים ברמת היחידה - לא להתחיל מהפונקציות הראשיות
+
+כללים:
+* עבור המימוש יכתבו בדיקות יחידה בכיסוי של 100%.
+* הקלט יהיה חוקי.
+* הפלט יופיע על המסך בצורה ויזואלית (view) אך קיימת חובה להחזיק ברקע את המידע בצורה של אובייקטים או מבני נתונים יעודיים.
+
+
+הרכב הציון:
+
+בדיקה אוטומטית:
+* מס' טסטים שעברו / מס' טסטים כולל - מינימום של 10 טסטים - 15%
+* אחוז כיסוי קוד - 15%
+* 15% - Max (0, 100 - (כמות שגיאות כלי אנליזה סטטית))
+
+בדיקה ידנית:
+* שתי בדיקות ידניות - 55%
+
+
+בנוסף:
+* כלי הבדיקה האוטומטיים ניתנים לסטודנטים לשם קבלת מדדים בזמן הפיתוח.
+* תתבצע בדיקה אוטומטית להעתקות של קוד.
