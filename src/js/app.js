@@ -1,10 +1,18 @@
 import $ from 'jquery';
-import {parseCode} from './code-analyzer';
+import {CFGFromCode} from './code-analyzer';
 
+let input_counter = 0;
 $(document).ready(function () {
     $('#codeSubmissionButton').click(() => {
         let codeToParse = $('#codePlaceholder').val();
-        let parsedCode = parseCode(codeToParse);
-        $('#parsedCode').val(JSON.stringify(parsedCode, null, 2));
+        let CFG = CFGFromCode(codeToParse);
+        $('#parsedCode').val(CFG);
+    });
+
+    $('#add-input-button').click(()=>{
+        let element = document.createElement('input');
+        element.type = 'text';
+        element.id = 'input_'+input_counter++;
+        document.getElementById('input_div').appendChild(element);
     });
 });
